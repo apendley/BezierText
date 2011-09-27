@@ -10,9 +10,22 @@
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
 
+typedef struct
+{
+	float position;
+	float endPosition;	
+	int pathIndex;
+	float pathIndexPosition;
+	int maxDistToNext;
+} SBezierSpriteData;
+
 // HelloWorldLayer
 @interface HelloWorldLayer : CCLayer
 {
+	CCLabelBMFont* bmpFont;
+	CGPoint* points;
+	SBezierSpriteData* bezierData;
+	float bezierLength;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child
