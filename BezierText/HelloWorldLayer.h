@@ -9,6 +9,8 @@
 
 // When you import this file, you import all the cocos2d classes
 #import "cocos2d.h"
+#import "Path.h"
+
 
 typedef struct
 {
@@ -17,15 +19,14 @@ typedef struct
 	int pathIndex;
 	float pathIndexPosition;
 	int maxDistToNext;
-} SBezierSpriteData;
+} SSpriteBezierData;
 
 // HelloWorldLayer
 @interface HelloWorldLayer : CCLayer
 {
 	CCLabelBMFont* bmpFont;
-	CGPoint* points;
-	SBezierSpriteData* bezierData;
-	float bezierLength;
+	Path* path;
+	SSpriteBezierData* bezierData;
 }
 
 // returns a CCScene that contains the HelloWorldLayer as the only child

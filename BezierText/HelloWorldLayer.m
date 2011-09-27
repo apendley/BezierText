@@ -33,8 +33,6 @@ static float const kSpeed = 60.0f;
 	return scene;
 }
 
-
-
 static inline float bezierat( float a, float b, float c, float d, ccTime t )
 {
 	return (powf(1-t,3) * a + 
@@ -43,30 +41,17 @@ static inline float bezierat( float a, float b, float c, float d, ccTime t )
 			powf(t,3)*d );
 }
 
-CGPoint* bezierSample(CGPoint controlPoints[4], unsigned int numSegments)
+void bezierSample(Path* path, CGPoint controlPoints[4], unsigned int sampleCount)
 {
-	CGPoint* points = malloc(sizeof(CGPoint) * numSegments);
-	
-	for( int s = 0; s < numSegments; ++s )
+	for( int s = 0; s < sampleCount; ++s )
 	{
-		float t = (float)s / numSegments;
-		points[s].x = bezierat(controlPoints[0].x, controlPoints[1].x, controlPoints[2].x, controlPoints[3].x, t);
-		points[s].y = bezierat(controlPoints[0].y, controlPoints[1].y, controlPoints[2].y, controlPoints[3].y, t);
+		float t = (float)s / sampleCount;
+		
+		CGPoint p;
+		p.x = bezierat(controlPoints[0].x, controlPoints[1].x, controlPoints[2].x, controlPoints[3].x, t);
+		p.y = bezierat(controlPoints[0].y, controlPoints[1].y, controlPoints[2].y, controlPoints[3].y, t);
+		[path addPoint:p];
 	}
-	
-	return points;
-}
-
-float sampledBezierLength(CGPoint* bezierPoints, int numSegments)
-{
-	float length = 0;
-	
-	for( int p = 1; p < numSegments; p++ )
-	{
-		length += ccpLength(ccpSub(bezierPoints[p], bezierPoints[p-1]));
-	}
-	
-	return length;
 }
 
 // on "init" you need to initialize your instance
@@ -95,42 +80,43 @@ float sampledBezierLength(CGPoint* bezierPoints, int numSegments)
 		{ winSize.width * 0.333333, winSize.height * 0.75f },
 		{ -10, 20 },
 	};
+
+	path = [[Path alloc] initWithCapacity:kBezierSamples];
+	bezierSample(path, controlPoints, kBezierSamples);
 	
-	points = bezierSample(controlPoints, kBezierSamples);
-	bezierLength = sampledBezierLength(points, kBezierSamples);
+	int letterCount = bmpFont.children.count;
 	
-	bezierData = malloc(sizeof(SBezierSpriteData) * bmpFont.children.count);
+	NSMutableArray* originalDistances = [[NSMutableArray alloc] initWithCapacity:letterCount];
+	[originalDistances addObject:[NSNumber numberWithFloat:0.0f]];
 	
-	int* originalDistances = malloc(sizeof(int) * bmpFont.children.count);
-	
-	originalDistances[0] = 0;
-	for( int c = 1; c < bmpFont.children.count; ++c )
+	for( int c = 1; c < letterCount; ++c )
 	{
 		CCNode* child = [bmpFont.children objectAtIndex:c];
 		CCNode* prevChild = [bmpFont.children objectAtIndex:c-1];
-		originalDistances[c] = ccpDistance(prevChild.position, child.position);
-	}
+		[originalDistances addObject:[NSNumber numberWithFloat:ccpDistance(prevChild.position, child.position)]];
+	}	
 	
-	float endPosition = bezierLength - 15.0f;
+	float endPosition = path.length - 15.0f;
+	bezierData = malloc(sizeof(SSpriteBezierData) * letterCount);	
 	
-	for( int c = 0; c < bmpFont.children.count; ++c )
+	for( int c = 0; c < letterCount; ++c )
 	{
-		CCNode* child = [bmpFont.children objectAtIndex:c];
+		CCNode* child = [bmpFont.children objectAtIndex:c];		
+		float originalDist = [[originalDistances objectAtIndex:c] floatValue];
 		
-		endPosition -= originalDistances[c];
+		endPosition -= originalDist;
 		
-		// set all of their positions to the start position
-		child.position = points[0];	
+		child.position = [path pointAtIndex:0];	
 		child.visible = NO;
+		
 		bezierData[c].position = 0;
 		bezierData[c].endPosition = endPosition;
 		bezierData[c].pathIndex = 0;
 		bezierData[c].pathIndexPosition = 0;
-		bezierData[c].maxDistToNext = originalDistances[c];
-		child.userData = &bezierData[c];
+		bezierData[c].maxDistToNext = originalDist;
 	}
 	
-	free(originalDistances);	
+	[originalDistances release];
 	
 	[self schedule:@selector(updateBezierText:)];
 	
@@ -147,14 +133,13 @@ BOOL floatEqual(float n1, float n2)
 	for( int c = 0; c < bmpFont.children.count; ++c )
 	{	
 		CCNode* child = [bmpFont.children objectAtIndex:c];
-		SBezierSpriteData* bd = (SBezierSpriteData*)(child.userData);
+		SSpriteBezierData* bd = &bezierData[c];
 		
 		float pathPos = bd->position;
 		
 		if( c > 0 )
 		{
-			CCNode* prevChild = [bmpFont.children objectAtIndex:c-1];
-			SBezierSpriteData* pbd = (SBezierSpriteData*)(prevChild.userData);
+			SSpriteBezierData* pbd = &bezierData[c-1];
 			
 			float dist = pbd->position - bd->position;
 			
@@ -175,19 +160,19 @@ BOOL floatEqual(float n1, float n2)
 		
 		if( pathPos > bd->position )
 		{
-			CGPoint curPoint = points[bd->pathIndex];
-			CGPoint nextPoint = points[bd->pathIndex+1];
+			CGPoint curPoint = [path pointAtIndex:bd->pathIndex];
+			CGPoint nextPoint = [path pointAtIndex:bd->pathIndex+1];
 			float distToNext = ccpLength(ccpSub(nextPoint, curPoint));
-			float nextPointPos = bd->pathIndexPosition + ccpLength(ccpSub(points[bd->pathIndex+1], points[bd->pathIndex]));
+			float nextPointPos = bd->pathIndexPosition + ccpLength(ccpSub(nextPoint, curPoint));
 			
 			BOOL firstLoop = YES;
 			while( nextPointPos <= pathPos )
 			{
-				if( bd->pathIndex == kBezierSamples - 1 )
+				if( bd->pathIndex == path.pointCount - 1 )
 				{
-					bd->pathIndex = kBezierSamples - 1;
-					bd->pathIndexPosition = bezierLength;
-					curPoint = points[bd->pathIndex];
+					bd->pathIndex = path.pointCount - 1;
+					bd->pathIndexPosition = path.length;
+					curPoint = [path pointAtIndex:bd->pathIndex];
 					nextPoint = curPoint;
 					break;						
 				}					
@@ -195,8 +180,8 @@ BOOL floatEqual(float n1, float n2)
 				{
 					if( !firstLoop )
 					{
-						curPoint = points[bd->pathIndex];
-						nextPoint = points[bd->pathIndex+1];
+						curPoint = [path pointAtIndex:bd->pathIndex];
+						nextPoint = [path pointAtIndex:bd->pathIndex+1];
 						distToNext = ccpLength(ccpSub(nextPoint, curPoint));
 						nextPointPos += distToNext;
 					}
@@ -238,7 +223,7 @@ BOOL floatEqual(float n1, float n2)
 // on "dealloc" you need to release all your retained objects
 - (void) dealloc
 {
-	free(points);
+	[path release];
 	free(bezierData);
 	
 	[super dealloc];

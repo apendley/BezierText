@@ -128,6 +128,7 @@
 		9A8E1DBF143185EB00DADCC2 /* bitmapFontTest3.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A8E1DBD143185EB00DADCC2 /* bitmapFontTest3.png */; };
 		9A8E1DC21431998600DADCC2 /* bitmapFontTest4.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 9A8E1DC01431998600DADCC2 /* bitmapFontTest4.fnt */; };
 		9A8E1DC31431998600DADCC2 /* bitmapFontTest4.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A8E1DC11431998600DADCC2 /* bitmapFontTest4.png */; };
+		9A8E1DC6143214F300DADCC2 /* Path.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9A8E1DC5143214F300DADCC2 /* Path.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -372,6 +373,8 @@
 		9A8E1DBD143185EB00DADCC2 /* bitmapFontTest3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bitmapFontTest3.png; sourceTree = "<group>"; };
 		9A8E1DC01431998600DADCC2 /* bitmapFontTest4.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bitmapFontTest4.fnt; sourceTree = "<group>"; };
 		9A8E1DC11431998600DADCC2 /* bitmapFontTest4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bitmapFontTest4.png; sourceTree = "<group>"; };
+		9A8E1DC4143214F300DADCC2 /* Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
+		9A8E1DC5143214F300DADCC2 /* Path.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Path.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,6 +431,8 @@
 		9A8E1BD414316EBD00DADCC2 /* BezierText */ = {
 			isa = PBXGroup;
 			children = (
+				9A8E1DC4143214F300DADCC2 /* Path.h */,
+				9A8E1DC5143214F300DADCC2 /* Path.mm */,
 				9A8E1D2614316EC000DADCC2 /* AppDelegate.h */,
 				9A8E1D2714316EC000DADCC2 /* AppDelegate.m */,
 				9A8E1D2914316EC000DADCC2 /* RootViewController.h */,
@@ -949,6 +954,7 @@
 				9A8E1D2814316EC000DADCC2 /* AppDelegate.m in Sources */,
 				9A8E1D2B14316EC000DADCC2 /* RootViewController.m in Sources */,
 				9A8E1D2E14316EC000DADCC2 /* HelloWorldLayer.m in Sources */,
+				9A8E1DC6143214F300DADCC2 /* Path.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
