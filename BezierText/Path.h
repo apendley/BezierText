@@ -14,12 +14,15 @@
 	BOOL lengthDirty;
 }
 
-@property(nonatomic, readonly) int pointCount;
+@property(nonatomic, readonly) unsigned pointCount;
 @property(nonatomic, readonly) float length;
+
++(id)pathWithCapacity:(unsigned int)capacity;
 
 -(id)initWithCapacity:(unsigned int)capacity;
 
 -(void)addPoint:(CGPoint)point;
+-(void)addPointsWithBezier:(CGPoint[4])controlPoints pointCount:(unsigned int)pointCount;
 
 -(CGPoint)pointAtIndex:(int)index;
 

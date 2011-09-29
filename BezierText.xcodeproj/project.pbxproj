@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A6956EB1434EC7600B6F4AE /* PathText.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6956EA1434EC7600B6F4AE /* PathText.m */; };
 		9A8E1BC514316EBD00DADCC2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8E1BC414316EBD00DADCC2 /* QuartzCore.framework */; };
 		9A8E1BC714316EBD00DADCC2 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8E1BC614316EBD00DADCC2 /* OpenGLES.framework */; };
 		9A8E1BC914316EBD00DADCC2 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A8E1BC814316EBD00DADCC2 /* OpenAL.framework */; };
@@ -132,6 +133,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9A6956E91434EC7600B6F4AE /* PathText.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PathText.h; sourceTree = "<group>"; };
+		9A6956EA1434EC7600B6F4AE /* PathText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathText.m; sourceTree = "<group>"; };
 		9A8E1BC014316EBD00DADCC2 /* BezierText.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BezierText.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A8E1BC414316EBD00DADCC2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9A8E1BC614316EBD00DADCC2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -435,6 +438,8 @@
 				9A8E1DC5143214F300DADCC2 /* Path.mm */,
 				9A8E1D2614316EC000DADCC2 /* AppDelegate.h */,
 				9A8E1D2714316EC000DADCC2 /* AppDelegate.m */,
+				9A6956E91434EC7600B6F4AE /* PathText.h */,
+				9A6956EA1434EC7600B6F4AE /* PathText.m */,
 				9A8E1D2914316EC000DADCC2 /* RootViewController.h */,
 				9A8E1D2A14316EC000DADCC2 /* RootViewController.m */,
 				9A8E1D2C14316EC000DADCC2 /* HelloWorldLayer.h */,
@@ -955,6 +960,7 @@
 				9A8E1D2B14316EC000DADCC2 /* RootViewController.m in Sources */,
 				9A8E1D2E14316EC000DADCC2 /* HelloWorldLayer.m in Sources */,
 				9A8E1DC6143214F300DADCC2 /* Path.mm in Sources */,
+				9A6956EB1434EC7600B6F4AE /* PathText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1048,6 +1054,7 @@
 				9A8E1D3414316EC000DADCC2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
